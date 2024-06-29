@@ -17,7 +17,7 @@ contract solver {
     function setValue(uint256 newValue) public {
         
         require(newValue > 10, "Value must be greater than ten");
-        require(newValue <= maximumValue, "Value must be less than or equal to maximum value");
+        
         
         value = newValue;
     }
@@ -27,7 +27,7 @@ contract solver {
       
         require(msg.sender == owner, "Only the owner can call this function");
 
-        value = 0;
+        
     }
 
     function checkInvariant() public view {
