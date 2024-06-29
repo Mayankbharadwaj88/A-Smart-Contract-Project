@@ -16,7 +16,7 @@ contract solver {
    
     function setValue(uint256 newValue) public {
         
-        require(newValue > 10, "Value must be greater than zero");
+        require(newValue > 10, "Value must be greater than ten");
         require(newValue <= maximumValue, "Value must be less than or equal to maximum value");
         
         value = newValue;
