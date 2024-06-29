@@ -23,14 +23,14 @@ contract solver {
     }
 
     
-    function restrictedFunction() public {
+    function restrictedFunction() public view {
       
         require(msg.sender == owner, "Only the owner can call this function");
 
         
     }
 
-    function checkInvariant() public view {
+    function exceed() public view {
 
         assert(value <= maximumValue);
     }
