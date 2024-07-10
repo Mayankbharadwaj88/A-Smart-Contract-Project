@@ -1,48 +1,55 @@
-# Solver Smart Contract
+# Healthcare Data Management System
 
-I have a created a smart contract 'Solver' which explains the working of three functions that is revert,require and assert.These functions improve the readability of contract code
+The HealthcareDataManagement contract is designed to manage patient records in a secure and decentralized manner using Ethereum's blockchain. The contract includes functionality for adding, retrieving, and removing patient records, with built-in error handling mechanisms to ensure data integrity and security.
 
-## Contract Description
+## Key Features
 
-The `solver` contract is designed to:
-- Manage an owner address that is set upon contract deployment.
-- Allow setting a value within specific constraints.
-- Include functions restricted to the owner.
-- Demonstrate use of `require`, `assert`, and `revert` statements.
+- **Add Patient Records**: Allows the addition of new patient records with mandatory fields such as patient ID, name, and medical history. Utilizes `require` statements to ensure the validity of input data.
+- **Retrieve Medical Records**: Provides a way to fetch the medical history of a patient using their ID. Uses `assert` statements to confirm that the patient record is active.
+- **Remove Patient Records**: Facilitates the removal of patient records. Uses `revert` statements to handle cases where the patient ID does not exist or the record is already inactive.
+
+## Error Handling
+
+- **`require`**: Ensures that inputs meet specific criteria before executing the function logic, preventing invalid data from being processed.
+- **`assert`**: Verifies conditions that should always be true, indicating a serious error if they fail.
+- **`revert`**: Provides a way to halt execution and revert state changes if certain conditions are not met, allowing for custom error messages.
 
 ## Functions
 
-### Public Variables
+### `addPatient`
 
-- `address public owner`: The address of the contract owner.
-- `uint256 public value`: A value managed by the contract.
-- `uint256 public maximumValue`: The maximum allowed value, initialized to 100.
+```solidity
+function addPatient(uint256 _id, string memory _name, string memory _medicalhistory) external {
+    require(_id > 0, "Patient ID must be greater than zero.");
+    require(bytes(_name).length > 0, "Patient name cannot be empty.");
+    
+    patients[_id] = Patient({
+        name: _name,
+        medicalhistory: _medicalhistory,
+        isActive: true
+    });
+}
+```
+### `getMedicalRecord`
+```solidity
+function getMedicalRecord(uint256 _id) external view returns (string memory) {
+        assert(patients[_id].isActive); 
+        
+        return patients[_id].medicalhistory;
+    }
 
-### Constructor
-
-The constructor initializes the contract:
-- Sets the `owner` to the address that deploys the contract.
-- Initializes `value` to 0.
-- Sets `maximumValue` to 100.
-
-### setValue(uint256 newValue)
-
-Allows setting the `value` to a new value with the following constraint:
-- `newValue` must be greater than 10.
-
-### restrictedFunction()
-
-A function that can only be called by the owner of the contract.
-
-### exceed()
-
-A function to assert that the current `value` does not exceed `maximumValue`.
-
-### conditionalRevert(bool shouldRevert)
-
-A function that reverts the transaction intentionally if `shouldRevert` is true.
-
-## Usage
+```
+### `removePatient`
+ ```solidity
+ function removePatient(uint256 _id) external {
+        if (!patients[_id].isActive) {
+            revert("Patient ID does not exist");
+        }
+        
+        delete patients[_id];
+    }
+}
+```
 
 ### Deployment
 
@@ -52,28 +59,6 @@ Deploy the contract using [Remix IDE](https://remix.ethereum.org/):
 2. Create a new file and paste the Solidity code.
 3. Compile the contract using the Solidity compiler.
 4. Deploy the contract from the "Deploy & Run Transactions" tab.
-
-### Interaction
-
-Interact with the deployed contract using the "Deploy & Run Transactions" tab in Remix IDE:
-
-1. **Set Value:**
-   - Locate the `setValue` function in the deployed contract interface.
-   - Enter a value greater than 10 in the input field.
-   - Click on the `transact` button to set the new value.
-
-2. **Restricted Function:**
-   - Locate the `restrictedFunction` in the deployed contract interface.
-   - Click on the `call` button to execute the function (ensure you are the owner).
-
-3. **Exceed Check:**
-   - Locate the `exceed` function in the deployed contract interface.
-   - Click on the `call` button to check if the value exceeds the maximum value.
-
-4. **Conditional Revert:**
-   - Locate the `conditionalRevert` function in the deployed contract interface.
-   - Enter `true` or `false` in the input field.
-   - Click on the `transact` button to intentionally revert the transaction if `true` is provided.
 
 ## License
 
