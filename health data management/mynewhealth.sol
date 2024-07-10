@@ -23,10 +23,6 @@ contract HealthcareDataManagement {
         });
     }
 
-    function updateMedicalRecord(uint256 _id, string memory _medicalhistory) external {
-        
-        patients[_id].medicalhistory = _medicalhistory;
-    }
 
     
     function getMedicalRecord(uint256 _id) external view returns (string memory) {
